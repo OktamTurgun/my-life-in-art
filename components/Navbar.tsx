@@ -1,3 +1,4 @@
+import { Ionicons } from '@expo/vector-icons';
 import { useEffect, useState } from 'react';
 import { Platform, StyleSheet, Text, TouchableOpacity, useWindowDimensions, View } from 'react-native';
 import { useColors } from '../hooks/useColors';
@@ -5,6 +6,8 @@ import { useColors } from '../hooks/useColors';
 type Props = {
   onMenuPress: () => void;
   showHamburger?: boolean;
+  onThemeToggle: () => void;
+  isDark: boolean;
 };
 
 function LiveDate() {
@@ -16,10 +19,19 @@ function LiveDate() {
   const pad = (n: number) => String(n).padStart(2, '0');
   const time = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
   const date = `${pad(now.getDate())}.${pad(now.getMonth() + 1)}.${now.getFullYear()}`;
-  return <Text style={{ fontFamily: Platform.OS === 'web' ? 'monospace' : 'System', fontSize: 14, letterSpacing: 0.5, color: '#717182' }}>{time} | {date}</Text>;
+  return (
+    <Text style={{
+      fontFamily: Platform.OS === 'web' ? 'monospace' : 'System',
+      fontSize: 14,
+      letterSpacing: 0,
+      color: '#717182'
+    }}>
+      {time} | {date}
+    </Text>
+  );
 }
 
-export default function Navbar({ onMenuPress, showHamburger = true }: Props) {
+export default function Navbar({ onMenuPress, showHamburger = true, onThemeToggle, isDark }: Props) {
   const C = useColors();
   const { width } = useWindowDimensions();
   const isSmall = width < 500;
@@ -32,8 +44,8 @@ export default function Navbar({ onMenuPress, showHamburger = true }: Props) {
 
       {/* Chap — Logo */}
       <View style={styles.logoArea}>
-        <View style={[styles.logoBadge, { backgroundColor: C.primary }]}>
-          <Text style={[styles.logoBadgeText, { color: C.primaryFg }]}>MU</Text>
+        <View style={[styles.logoBadge, { backgroundColor: '#f29900' }]}>
+          <Text style={[styles.logoBadgeText, { color: '#fff' }]}>MU</Text>
         </View>
         {!isSmall && (
           <View style={styles.logoTextBox}>
@@ -51,14 +63,26 @@ export default function Navbar({ onMenuPress, showHamburger = true }: Props) {
       {/* O'ng */}
       <View style={styles.right}>
         {!isSmall && <LiveDate />}
+
+        {/* Dark mode toggle */}
+        <TouchableOpacity
+          onPress={onThemeToggle}
+          style={[styles.iconBtn, { backgroundColor: C.bgMuted }]}
+        >
+          <Ionicons
+            name={isDark ? 'sunny-outline' : 'moon-outline'}
+            size={18}
+            color={isDark ? '#f29900' : C.textMuted}
+          />
+        </TouchableOpacity>
+
+        {/* Hamburger */}
         {showHamburger && (
           <TouchableOpacity
             onPress={onMenuPress}
-            style={[styles.menuBtn, { backgroundColor: C.bgMuted }]}
+            style={[styles.iconBtn, { backgroundColor: C.bgMuted }]}
           >
-            <View style={[styles.line, { backgroundColor: C.text }]} />
-            <View style={[styles.line, styles.lineShort, { backgroundColor: C.text }]} />
-            <View style={[styles.line, { backgroundColor: C.text }]} />
+            <Ionicons name="menu-outline" size={22} color={C.text} />
           </TouchableOpacity>
         )}
       </View>
@@ -89,9 +113,8 @@ const styles = StyleSheet.create({
   logoArea: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    gap: 10,
     flex: 1,
-    minWidth: 180,
   },
   logoBadge: {
     width: 40,
@@ -105,19 +128,19 @@ const styles = StyleSheet.create({
     fontWeight: '900',
     fontSize: 16,
   },
-  logoTextBox: { gap: 0 },
+  logoTextBox: { gap: 1 },
   logoName: {
     fontWeight: '800',
-    fontSize: 24,
+    fontSize: 16,
   },
   logoLabel: {
     fontSize: 12,
-    letterSpacing: 2,
+    letterSpacing: 1,
     fontWeight: '600',
   },
   title: {
-    fontSize: 14,
-    fontWeight: '500',
+    fontSize: 13,
+    fontWeight: '600',
     letterSpacing: 2,
     textTransform: 'uppercase',
     flex: 2,
@@ -128,17 +151,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-end',
-    gap: 12,
+    gap: 8,
   },
-  menuBtn: {
-    gap: 5,
-    padding: 6,
-    borderRadius: 6,
+  iconBtn: {
+    width: 36,
+    height: 36,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  line: {
-    width: 18,
-    height: 1.5,
-    borderRadius: 2,
-  },
-  lineShort: { width: 12 },
 });
