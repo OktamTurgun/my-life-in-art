@@ -1,6 +1,6 @@
 import { useRouter } from 'expo-router';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import Colors from '../constants/colors';
+import { Image, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useColors } from '../hooks/useColors';
 
 type Props = {
   id: string;
@@ -12,21 +12,44 @@ type Props = {
 
 export default function PersonCard({ id, name, profession, image, isSelected }: Props) {
   const router = useRouter();
+  const C = useColors();
 
   return (
     <TouchableOpacity
-      style={[styles.card, isSelected && styles.cardSelected]}
+      style={[
+        styles.card,
+        {
+          backgroundColor: isSelected ? C.bgMuted : C.bgCard,
+          borderColor: C.border,
+          borderLeftColor: isSelected ? '#f29900' : 'transparent',
+        }
+      ]}
       onPress={() => router.push(`/person/${id}`)}
       activeOpacity={0.75}
     >
-      <Image source={{ uri: image }} style={styles.avatar} />
+      {/* Avatar */}
+      <Image
+        source={{ uri: image }}
+        style={[
+          styles.avatar,
+          { borderColor: isSelected ? '#f29900' : C.border }
+        ]}
+      />
+
+      {/* Info */}
       <View style={styles.info}>
-        <Text style={[styles.name, isSelected && styles.nameSelected]}>
+        <Text style={[styles.name, { color: C.text }]}>
           {name}
         </Text>
-        <Text style={styles.profession}>{profession}</Text>
+        <Text style={[styles.profession, { color: C.textMuted }]}>
+          {profession}
+        </Text>
       </View>
-      <Text style={styles.arrow}>›</Text>
+
+      {/* Arrow */}
+      <Text style={[styles.arrow, { color: isSelected ? '#f29900' : C.textMuted }]}>
+        ›
+      </Text>
     </TouchableOpacity>
   );
 }
@@ -35,29 +58,29 @@ const styles = StyleSheet.create({
   card: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: Colors.white,
     borderRadius: 12,
     padding: 14,
-    marginBottom: 10,
+    marginBottom: 8,
+    borderWidth: 1,
     borderLeftWidth: 3,
-    borderLeftColor: 'transparent',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.08,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  cardSelected: {
-    borderLeftColor: Colors.gold,
-    backgroundColor: Colors.creamDark,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.05,
+        shadowRadius: 6,
+      },
+      android: { elevation: 1 },
+      web: { boxShadow: '0 1px 8px rgba(0,0,0,0.05)' },
+    }),
   },
   avatar: {
     width: 48,
     height: 48,
     borderRadius: 24,
     borderWidth: 2,
-    borderColor: Colors.gold,
-    backgroundColor: Colors.brownLight,
+    backgroundColor: '#ececf0',
+    flexShrink: 0,
   },
   info: {
     flex: 1,
@@ -65,21 +88,15 @@ const styles = StyleSheet.create({
   },
   name: {
     fontSize: 15,
-    fontWeight: '700',
-    color: Colors.brownDark,
-  },
-  nameSelected: {
-    color: Colors.brownMid,
+    fontWeight: '600',
   },
   profession: {
     fontSize: 12,
-    color: Colors.gold,
-    fontWeight: '600',
+    fontWeight: '400',
     marginTop: 2,
   },
   arrow: {
     fontSize: 22,
-    color: Colors.brownLight,
     marginLeft: 8,
   },
 });

@@ -1,13 +1,31 @@
 import { Platform, StyleSheet, Text, View } from 'react-native';
-import Colors from '../constants/colors';
+import { useColors } from '../hooks/useColors';
 
 export default function Footer() {
+  const C = useColors();
+
   return (
-    <View style={styles.footer}>
+    <View style={[styles.footer, {
+      backgroundColor: '#030213',
+      borderTopColor: C.border,
+    }]}>
       <View style={styles.inner}>
-        <Text style={styles.title}>San'atdagi hayot yo'lim</Text>
-        <View style={styles.dot} />
-        <Text style={styles.copy}>© 2024 Mirzo Ulug'bek</Text>
+
+        {/* Chap — Logo */}
+        <View style={styles.left}>
+          <View style={[styles.logoBadge, { backgroundColor: '#f29900' }]}>
+            <Text style={[styles.logoBadgeText, { color: '#ffffff' }]}>MU</Text>
+          </View>
+          <Text style={[styles.title, { color: '#ffffff' }]}>
+            San'atdagi hayot yo'lim
+          </Text>
+        </View>
+
+        {/* O'ng — Copyright */}
+        <Text style={[styles.copy, { color: 'rgba(255,255,255,0.5)' }]}>
+          © 2024 Mirzo Ulug'bek
+        </Text>
+
       </View>
     </View>
   );
@@ -15,37 +33,40 @@ export default function Footer() {
 
 const styles = StyleSheet.create({
   footer: {
-    backgroundColor: Colors.navbarBg,
     borderTopWidth: 1,
-    borderTopColor: 'rgba(200,146,42,0.25)',
-    paddingVertical: 14,
+    paddingVertical: 16,
     paddingHorizontal: 24,
     ...Platform.select({
-      web: { boxShadow: '0 -1px 12px rgba(26,8,0,0.2)' },
+      web: { boxShadow: '0 -1px 8px rgba(0,0,0,0.1)' },
     }),
   },
   inner: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  left: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  logoBadge: {
+    width: 32,
+    height: 32,
+    borderRadius: 7,
+    alignItems: 'center',
     justifyContent: 'center',
-    gap: 12,
+  },
+  logoBadgeText: {
+    fontWeight: '900',
+    fontSize: 13,
   },
   title: {
-    color: Colors.goldLight,
     fontSize: 13,
     fontWeight: '700',
     letterSpacing: 0.3,
   },
-  dot: {
-    width: 3,
-    height: 3,
-    borderRadius: 2,
-    backgroundColor: Colors.gold,
-    opacity: 0.5,
-  },
   copy: {
-    color: Colors.textMuted,
     fontSize: 12,
-    letterSpacing: 0.3,
   },
 });
