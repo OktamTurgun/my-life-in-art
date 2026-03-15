@@ -1,4 +1,5 @@
 import {
+  Image,
   Linking, Platform,
   StyleSheet,
   Text,
@@ -6,6 +7,7 @@ import {
   View
 } from 'react-native';
 import { useColors } from '../hooks/useColors';
+
 
 type Props = {
   videoId: string;
@@ -63,64 +65,25 @@ function WebEmbed({ videoId }: { videoId: string }) {
 }
 
 function MobileEmbed({ videoId, youtubeUrl }: { videoId: string; youtubeUrl: string }) {
-  try {
-    const { WebView } = require('react-native-webview');
-    const html = `
-      <!DOCTYPE html>
-      <html>
-        <head>
-          <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-          <style>
-            * { margin: 0; padding: 0; box-sizing: border-box; background: #000; }
-            body { width: 100vw; height: 100vh; overflow: hidden; }
-            iframe {
-              position: absolute;
-              top: 0; left: 0;
-              width: 100%; height: 100%;
-              border: none;
-            }
-          </style>
-        </head>
-        <body>
-          <iframe
-            src="https://www.youtube-nocookie.com/embed/${videoId}?rel=0&playsinline=1&modestbranding=1&enablejsapi=1"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen
-          ></iframe>
-        </body>
-      </html>
-    `;
-    return (
-      <WebView
-        source={{ html }}
-        style={{ flex: 1, backgroundColor: '#000' }}
-        allowsFullscreenVideo={true}
-        allowsInlineMediaPlayback={true}
-        mediaPlaybackRequiresUserAction={false}
-        javaScriptEnabled={true}
-        domStorageEnabled={true}
-        originWhitelist={['*']}
-        mixedContentMode="always"
+  return (
+    <TouchableOpacity
+      style={styles.fallback}
+      onPress={() => Linking.openURL(youtubeUrl)}
+      activeOpacity={0.8}
+    >
+      <Image
+        source={{ uri: `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg` }}
+        style={styles.thumb}
+        resizeMode="cover"
       />
-    );
-  } catch {
-    return (
-      <TouchableOpacity
-        style={styles.fallback}
-        onPress={() => Linking.openURL(youtubeUrl)}
-      >
-        <View style={[styles.fallbackBtn, { backgroundColor: '#f29900' }]}>
-          <Text style={styles.fallbackIcon}>▶</Text>
+      <View style={styles.playOverlay}>
+        <View style={styles.playCircle}>
+          <Text style={styles.playArrow}>▶</Text>
         </View>
-        <Text style={[styles.fallbackText, { color: '#252525' }]}>
-          Videoni ko'rish
-        </Text>
-        <Text style={[styles.fallbackSub, { color: '#717182' }]}>
-          YouTube da ochish ↗
-        </Text>
-      </TouchableOpacity>
-    );
-  }
+        <Text style={styles.tapHint}>Videoni ko'rish uchun bosing ↗</Text>
+      </View>
+    </TouchableOpacity>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -181,16 +144,13 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
   videoBox: {
-    height: 420,
+    height: Platform.OS === 'web' ? 420 : 220,
     backgroundColor: '#000',
   },
   fallback: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 10,
-    backgroundColor: '#f5f5f5',
-    padding: 24,
+    position: 'relative',
+    backgroundColor: '#000',
   },
   fallbackBtn: {
     width: 64,
@@ -211,5 +171,41 @@ const styles = StyleSheet.create({
   },
   fallbackSub: {
     fontSize: 13,
+  },
+  thumb: {
+    position: 'absolute',
+    top: 0, left: 0, right: 0, bottom: 0,
+    width: '100%',
+    height: '100%',
+  },
+  playOverlay: {
+    position: 'absolute',
+    top: 0, left: 0, right: 0, bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(0,0,0,0.3)',
+  },
+  playCircle: {
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    backgroundColor: 'rgba(255,255,255,0.92)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 16,
+  },
+  playArrow: {
+    fontSize: 24,
+    color: '#f29900',
+    marginLeft: 4,
+  },
+  tapHint: {
+    color: '#fff',
+    fontSize: 12,
+    fontWeight: '600',
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    paddingHorizontal: 12,
+    paddingVertical: 4,
+    borderRadius: 20,
   },
 });

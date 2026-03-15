@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
     width: '100%',
     alignSelf: 'center',
     paddingTop: 8,
-    paddingHorizontal: 72,
+    paddingHorizontal: Platform.OS === 'web' ? 48 : 0,
   },
 
   // Hero
@@ -155,9 +155,9 @@ const styles = StyleSheet.create({
     paddingBottom: 12,
   },
   name: {
-    fontSize: 48,
+    fontSize: Platform.OS === 'web' ? 48 : 28,
     fontWeight: '700',
-    lineHeight: 52,
+    lineHeight: Platform.OS === 'web' ? 52 : 34,
     letterSpacing: 0.2,
   },
   nameLine: {
