@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
-import Colors from '../constants/colors';
+import { useColors } from '../hooks/useColors';
 
 type Props = {
   videoId: string;
@@ -13,24 +13,28 @@ type Props = {
 };
 
 export default function VideoPlayer({ videoId, title }: Props) {
+  const C = useColors();
   const youtubeUrl = `https://www.youtube.com/watch?v=${videoId}`;
 
   return (
     <View style={styles.wrapper}>
-      <View style={styles.container}>
+      <View style={[styles.container, {
+        backgroundColor: C.bgCard,
+        borderColor: C.border,
+      }]}>
 
         {/* Header */}
-        <View style={styles.header}>
+        <View style={[styles.header, { borderBottomColor: C.border }]}>
           <View style={styles.headerLeft}>
-            <View style={styles.playIcon}>
+            <View style={[styles.playIcon, { backgroundColor: '#f29900' }]}>
               <Text style={styles.playText}>▶</Text>
             </View>
-            <Text style={styles.headerText} numberOfLines={1}>
+            <Text style={[styles.headerText, { color: C.text }]} numberOfLines={1}>
               {title || 'Video suhbat'}
             </Text>
           </View>
           <TouchableOpacity onPress={() => Linking.openURL(youtubeUrl)}>
-            <Text style={styles.openLink}>YouTube ↗</Text>
+            <Text style={[styles.openLink, { color: '#f29900' }]}>YouTube ↗</Text>
           </TouchableOpacity>
         </View>
 
@@ -48,7 +52,6 @@ export default function VideoPlayer({ videoId, title }: Props) {
   );
 }
 
-// Web uchun iframe
 function WebEmbed({ videoId }: { videoId: string }) {
   return (
     <iframe
@@ -59,7 +62,6 @@ function WebEmbed({ videoId }: { videoId: string }) {
   );
 }
 
-// Mobil uchun — WebView HTML inject
 function MobileEmbed({ videoId, youtubeUrl }: { videoId: string; youtubeUrl: string }) {
   try {
     const { WebView } = require('react-native-webview');
@@ -102,15 +104,20 @@ function MobileEmbed({ videoId, youtubeUrl }: { videoId: string; youtubeUrl: str
       />
     );
   } catch {
-    // WebView yuklanmasa — YouTube ga yo'naltirish
     return (
       <TouchableOpacity
         style={styles.fallback}
         onPress={() => Linking.openURL(youtubeUrl)}
       >
-        <Text style={styles.fallbackIcon}>▶</Text>
-        <Text style={styles.fallbackText}>YouTube da ko'rish</Text>
-        <Text style={styles.fallbackSub}>Bosing ↗</Text>
+        <View style={[styles.fallbackBtn, { backgroundColor: '#f29900' }]}>
+          <Text style={styles.fallbackIcon}>▶</Text>
+        </View>
+        <Text style={[styles.fallbackText, { color: '#252525' }]}>
+          Videoni ko'rish
+        </Text>
+        <Text style={[styles.fallbackSub, { color: '#717182' }]}>
+          YouTube da ochish ↗
+        </Text>
       </TouchableOpacity>
     );
   }
@@ -118,24 +125,22 @@ function MobileEmbed({ videoId, youtubeUrl }: { videoId: string; youtubeUrl: str
 
 const styles = StyleSheet.create({
   wrapper: {
-    paddingHorizontal: 20,
+    paddingHorizontal: 28,
     marginBottom: 32,
   },
   container: {
     borderRadius: 16,
     overflow: 'hidden',
-    backgroundColor: Colors.navbarBg,
     borderWidth: 1,
-    borderColor: 'rgba(200,146,42,0.2)',
     ...Platform.select({
       ios: {
-        shadowColor: Colors.shadow,
-        shadowOffset: { width: 0, height: 6 },
-        shadowOpacity: 0.2,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.08,
         shadowRadius: 16,
       },
-      android: { elevation: 6 },
-      web: { boxShadow: '0 6px 32px rgba(26,8,0,0.18)' },
+      android: { elevation: 4 },
+      web: { boxShadow: '0 4px 24px rgba(0,0,0,0.08)' },
     }),
   },
   header: {
@@ -143,9 +148,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingVertical: 14,
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(200,146,42,0.15)',
   },
   headerLeft: {
     flexDirection: 'row',
@@ -157,52 +161,55 @@ const styles = StyleSheet.create({
     width: 28,
     height: 28,
     borderRadius: 14,
-    backgroundColor: Colors.gold,
     alignItems: 'center',
     justifyContent: 'center',
     flexShrink: 0,
   },
   playText: {
-    color: Colors.navbarBg,
+    color: '#fff',
     fontSize: 10,
     fontWeight: '900',
   },
   headerText: {
-    color: Colors.goldPale,
-    fontWeight: '700',
-    fontSize: 13,
+    fontWeight: '600',
+    fontSize: 14,
     flex: 1,
   },
   openLink: {
-    color: Colors.gold,
     fontSize: 12,
     fontWeight: '600',
-    opacity: 0.8,
     marginLeft: 8,
   },
   videoBox: {
-    height: 220,
+    height: 420,
     backgroundColor: '#000',
   },
   fallback: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 8,
-    backgroundColor: '#0a0a0a',
+    gap: 10,
+    backgroundColor: '#f5f5f5',
+    padding: 24,
+  },
+  fallbackBtn: {
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 4,
   },
   fallbackIcon: {
-    fontSize: 40,
-    color: Colors.gold,
+    fontSize: 24,
+    color: '#fff',
+    fontWeight: '900',
   },
   fallbackText: {
-    color: Colors.goldPale,
     fontSize: 16,
     fontWeight: '700',
   },
   fallbackSub: {
-    color: Colors.gold,
     fontSize: 13,
-    opacity: 0.7,
   },
 });

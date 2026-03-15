@@ -1,45 +1,64 @@
+import { useEffect, useState } from 'react';
 import { Platform, StyleSheet, Text, TouchableOpacity, useWindowDimensions, View } from 'react-native';
-import Colors from '../constants/colors';
+import { useColors } from '../hooks/useColors';
 
 type Props = {
   onMenuPress: () => void;
   showHamburger?: boolean;
 };
 
+function LiveDate() {
+  const [now, setNow] = useState(new Date());
+  useEffect(() => {
+    const timer = setInterval(() => setNow(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
+  const pad = (n: number) => String(n).padStart(2, '0');
+  const time = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+  const date = `${pad(now.getDate())}.${pad(now.getMonth() + 1)}.${now.getFullYear()}`;
+  return <Text style={{ fontFamily: Platform.OS === 'web' ? 'monospace' : 'System', fontSize: 14, letterSpacing: 0.5, color: '#717182' }}>{time} | {date}</Text>;
+}
+
 export default function Navbar({ onMenuPress, showHamburger = true }: Props) {
+  const C = useColors();
   const { width } = useWindowDimensions();
-  const isSmall = width < 400;
+  const isSmall = width < 500;
 
   return (
-    <View style={styles.navbar}>
+    <View style={[styles.navbar, {
+      backgroundColor: C.navbarBg,
+      borderBottomColor: C.border,
+    }]}>
 
       {/* Chap — Logo */}
       <View style={styles.logoArea}>
-        <View style={styles.logoBadge}>
-          <Text style={styles.logoBadgeText}>MU</Text>
+        <View style={[styles.logoBadge, { backgroundColor: C.primary }]}>
+          <Text style={[styles.logoBadgeText, { color: C.primaryFg }]}>MU</Text>
         </View>
         {!isSmall && (
           <View style={styles.logoTextBox}>
-            <Text style={styles.logoName}>Mirzo Ulug'bek</Text>
-            <Text style={styles.logoLabel}>✦ MUALLIF</Text>
+            <Text style={[styles.logoName, { color: C.text }]}>Mirzo Ulug'bek</Text>
+            <Text style={[styles.logoLabel, { color: '#f29900' }]}>+ muallif</Text>
           </View>
         )}
       </View>
 
       {/* O'rta — Sarlavha */}
-      <View style={styles.titleBox}>
-        <Text style={styles.titleItalic}>San'atdagi</Text>
-        <Text style={styles.titleBold}>hayot yo'lim</Text>
-      </View>
+      <Text style={[styles.title, { color: C.textMuted }]}>
+        San'atdagi hayot yo'lim
+      </Text>
 
       {/* O'ng */}
       <View style={styles.right}>
-        {!isSmall && <Text style={styles.year}>2024</Text>}
+        {!isSmall && <LiveDate />}
         {showHamburger && (
-          <TouchableOpacity onPress={onMenuPress} style={styles.menuBtn}>
-            <View style={styles.line} />
-            <View style={[styles.line, styles.lineShort]} />
-            <View style={styles.line} />
+          <TouchableOpacity
+            onPress={onMenuPress}
+            style={[styles.menuBtn, { backgroundColor: C.bgMuted }]}
+          >
+            <View style={[styles.line, { backgroundColor: C.text }]} />
+            <View style={[styles.line, styles.lineShort, { backgroundColor: C.text }]} />
+            <View style={[styles.line, { backgroundColor: C.text }]} />
           </TouchableOpacity>
         )}
       </View>
@@ -50,23 +69,21 @@ export default function Navbar({ onMenuPress, showHamburger = true }: Props) {
 
 const styles = StyleSheet.create({
   navbar: {
-    height: 60,
-    backgroundColor: Colors.navbarBg,
+    height: 68,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 14,
-    borderBottomWidth: 2,
-    borderBottomColor: Colors.gold,
+    paddingHorizontal: 20,
+    borderBottomWidth: 1,
     ...Platform.select({
       ios: {
-        shadowColor: Colors.shadow,
-        shadowOffset: { width: 0, height: 3 },
-        shadowOpacity: 0.5,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.04,
         shadowRadius: 6,
       },
-      android: { elevation: 8 },
-      web: { boxShadow: '0 3px 16px rgba(26,8,0,0.5)' },
+      android: { elevation: 1 },
+      web: { boxShadow: '0 1px 8px rgba(0,0,0,0.04)' },
     }),
   },
   logoArea: {
@@ -74,83 +91,54 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 8,
     flex: 1,
+    minWidth: 180,
   },
   logoBadge: {
-    width: 38,
-    height: 38,
+    width: 40,
+    height: 40,
     borderRadius: 9,
-    backgroundColor: Colors.gold,
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 1.5,
-    borderColor: Colors.goldPale,
     flexShrink: 0,
   },
   logoBadgeText: {
-    color: Colors.navbarBg,
     fontWeight: '900',
-    fontSize: 15,
-    letterSpacing: 0.5,
+    fontSize: 16,
   },
-  logoTextBox: {
-    gap: 1,
-  },
+  logoTextBox: { gap: 0 },
   logoName: {
-    color: Colors.goldPale,
     fontWeight: '800',
-    fontSize: 13,
-    letterSpacing: 0.2,
+    fontSize: 24,
   },
   logoLabel: {
-    color: Colors.gold,
-    fontSize: 9,
-    letterSpacing: 1.8,
+    fontSize: 12,
+    letterSpacing: 2,
     fontWeight: '600',
   },
-  titleBox: {
-    alignItems: 'center',
+  title: {
+    fontSize: 14,
+    fontWeight: '500',
+    letterSpacing: 2,
+    textTransform: 'uppercase',
     flex: 2,
-  },
-  titleItalic: {
-    color: Colors.goldPale,
-    fontSize: 10,
-    fontStyle: 'italic',
-    letterSpacing: 0.8,
-    opacity: 0.75,
-  },
-  titleBold: {
-    color: Colors.goldPale,
-    fontSize: 15,
-    fontWeight: '800',
-    letterSpacing: 0.3,
+    textAlign: 'center',
   },
   right: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-end',
-    gap: 10,
-  },
-  year: {
-    color: Colors.gold,
-    fontSize: 11,
-    fontWeight: '700',
-    letterSpacing: 1.5,
-    opacity: 0.75,
+    gap: 12,
   },
   menuBtn: {
     gap: 5,
-    padding: 7,
-    borderRadius: 7,
-    backgroundColor: 'rgba(200,146,42,0.12)',
+    padding: 6,
+    borderRadius: 6,
   },
   line: {
-    width: 20,
-    height: 2,
-    backgroundColor: Colors.goldPale,
+    width: 18,
+    height: 1.5,
     borderRadius: 2,
   },
-  lineShort: {
-    width: 13,
-  },
+  lineShort: { width: 12 },
 });

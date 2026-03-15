@@ -6,7 +6,7 @@ import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import Footer from '../components/Footer';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
-import Colors from '../constants/colors';
+import { useColors } from '../hooks/useColors';
 import { usePeople } from '../hooks/usePeople';
 
 const BREAKPOINT = 768;
@@ -16,6 +16,7 @@ export default function RootLayout() {
   const { people } = usePeople();
   const { width } = useWindowDimensions();
   const pathname = usePathname();
+  const C = useColors();
   const isWeb = Platform.OS === 'web';
   const isWide = isWeb && width >= BREAKPOINT;
 
@@ -25,8 +26,11 @@ export default function RootLayout() {
 
   return (
     <SafeAreaProvider>
-      <SafeAreaView style={styles.root} edges={['top', 'bottom']}>
-        <StatusBar style="light" backgroundColor={Colors.navbarBg} />
+      <SafeAreaView style={[styles.root, { backgroundColor: C.navbarBg }]} edges={['top', 'bottom']}>
+        <StatusBar
+          style={C.isDark ? 'light' : 'dark'}
+          backgroundColor={C.navbarBg}
+        />
 
         {/* Navbar */}
         <Navbar
@@ -35,9 +39,9 @@ export default function RootLayout() {
         />
 
         {/* Body */}
-        <View style={styles.body}>
+        <View style={[styles.body, { backgroundColor: C.bg }]}>
           {isWide && (
-            <View style={styles.desktopSidebar}>
+            <View style={[styles.desktopSidebar, { borderRightColor: C.sidebarBorder }]}>
               <Sidebar
                 people={people}
                 selectedId={selectedId}
@@ -51,7 +55,7 @@ export default function RootLayout() {
             <Stack
               screenOptions={{
                 headerShown: false,
-                contentStyle: { backgroundColor: Colors.cream },
+                contentStyle: { backgroundColor: C.bg },
                 animation: 'fade',
               }}
             />
@@ -79,17 +83,14 @@ export default function RootLayout() {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    backgroundColor: Colors.navbarBg,
   },
   body: {
     flex: 1,
     flexDirection: 'row',
-    backgroundColor: Colors.cream,
   },
   desktopSidebar: {
-    width: 272,
+    width: 280,
     borderRightWidth: 1,
-    borderRightColor: Colors.sidebarBorder,
   },
   content: {
     flex: 1,

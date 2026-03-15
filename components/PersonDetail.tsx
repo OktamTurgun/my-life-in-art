@@ -6,7 +6,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import Colors from '../constants/colors';
+import { useColors } from '../hooks/useColors';
 import VideoPlayer from './VideoPlayer';
 
 type Props = {
@@ -21,53 +21,72 @@ type Props = {
 export default function PersonDetail({
   name, profession, image, title, text, videoId
 }: Props) {
+  const C = useColors();
+
   return (
     <ScrollView
-      style={styles.container}
+      style={[styles.container, { backgroundColor: C.bg }]}
       contentContainerStyle={styles.scrollContent}
       showsVerticalScrollIndicator={false}
     >
       <View style={styles.inner}>
 
-        {/* Header */}
-        <View style={styles.header}>
+        {/* Hero */}
+        <View style={styles.hero}>
           <View style={styles.avatarWrapper}>
             <Image source={{ uri: image }} style={styles.avatar} />
-            <View style={styles.avatarRing} />
-          </View>
-          <View style={styles.headerInfo}>
-            <View style={styles.professionBadge}>
-              <Text style={styles.professionText}>{profession.toUpperCase()}</Text>
+            <View style={[styles.professionBadge, { backgroundColor: C.primary }]}>
+              <Text style={[styles.professionBadgeText, { color: C.primaryFg }]}>
+                {profession.toUpperCase()}
+              </Text>
             </View>
-            <Text style={styles.name}>{name}</Text>
+          </View>
+          <View style={styles.heroInfo}>
+            <Text style={[styles.name, { color: C.text }]}>{name}</Text>
+            <View style={[styles.nameLine, { backgroundColor: C.primary }]} />
           </View>
         </View>
 
-        {/* Ajratgich */}
+        {/* Divider */}
         <View style={styles.divider}>
-          <View style={styles.dividerLine} />
-          <Text style={styles.dividerIcon}>✦</Text>
-          <View style={styles.dividerLine} />
+          <View style={[styles.dividerLine, { backgroundColor: C.border }]} />
+          <Text style={[styles.dividerIcon, { color: C.textMuted }]}>✦</Text>
+          <View style={[styles.dividerLine, { backgroundColor: C.border }]} />
         </View>
 
-        {/* Bo'lim sarlavhasi */}
-        <View style={styles.sectionHeader}>
-          <View style={styles.sectionAccent} />
-          <Text style={styles.sectionTitle}>{title}</Text>
+        {/* Quote blok */}
+        <View style={[styles.quoteCard, { backgroundColor: C.bgCard, borderColor: C.border }]}>
+          <Text style={[styles.quoteMark, { color: C.bgMuted }]}>"</Text>
+          <View style={styles.quoteLabel}>
+            <View style={[styles.quoteLabelLine, { backgroundColor: C.textMuted }]} />
+            <Text style={[styles.quoteLabelText, { color: C.textMuted }]}>
+              {title.toUpperCase()}
+            </Text>
+          </View>
+          <Text style={[styles.quoteText, { color: C.text }]}>{text}</Text>
         </View>
 
-        {/* Matn */}
-        <View style={styles.textCard}>
-          <Text style={styles.openQuote}>"</Text>
-          <Text style={styles.text}>{text}</Text>
-          <Text style={styles.closeQuote}>"</Text>
+        {/* Mening hikoyam */}
+        <View style={[styles.storyCard, { backgroundColor: C.bgCard, borderColor: C.border }]}>
+          <View style={styles.storyHeader}>
+            <View style={[styles.storyAccent, { backgroundColor: C.primary }]} />
+            <Text style={[styles.storyTitle, { color: C.text }]}>Mening hikoyam</Text>
+          </View>
+          <Text style={[styles.storyText, { color: C.textMuted }]}>
+            {text}
+          </Text>
         </View>
 
         {/* Video */}
         <VideoPlayer
           videoId={videoId}
-          title={`Video suhbat — ${name}`}
+          title={`Video suhbat — ${name} bilan`}
         />
+
+        {/* Pastki hint */}
+        <Text style={[styles.hint, { color: C.textMuted }]}>
+          ← Chap tomondagi ro'yxatdan boshqa ishtirokchilarni tanlang
+        </Text>
 
       </View>
     </ScrollView>
@@ -77,73 +96,78 @@ export default function PersonDetail({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.cream,
   },
   scrollContent: {
     paddingBottom: 40,
   },
-  // Maksimal kenglik — professional web ko'rinish
   inner: {
-    maxWidth: 960,
     width: '100%',
-    alignSelf: 'flex-start',
+    alignSelf: 'center',
     paddingTop: 8,
+    paddingHorizontal: 72,
   },
 
-  // Header
-  header: {
+  // Hero
+  hero: {
     flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 28,
-    paddingVertical: 28,
+    alignItems: 'flex-end',
+    padding: 28,
+    paddingBottom: 20,
     gap: 20,
   },
   avatarWrapper: {
     position: 'relative',
+    flexShrink: 0,
   },
   avatar: {
-    width: 84,
-    height: 84,
-    borderRadius: 42,
-    backgroundColor: Colors.brownLight,
-  },
-  avatarRing: {
-    position: 'absolute',
-    top: -4, left: -4,
-    width: 92, height: 92,
-    borderRadius: 46,
-    borderWidth: 2,
-    borderColor: Colors.gold,
-    opacity: 0.7,
-  },
-  headerInfo: {
-    flex: 1,
-    gap: 8,
+    width: 128,
+    height: 128,
+    borderRadius: 16,
+    backgroundColor: '#ececf0',
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.1,
+        shadowRadius: 12,
+      },
+      android: { elevation: 4 },
+      web: { boxShadow: '0 4px 20px rgba(0,0,0,0.08)' },
+    }),
   },
   professionBadge: {
-    alignSelf: 'flex-start',
-    backgroundColor: 'rgba(200,146,42,0.1)',
-    paddingHorizontal: 12,
+    position: 'absolute',
+    bottom: -8,
+    left: 0,
+    right: 0,
+    alignItems: 'center',
     paddingVertical: 4,
     borderRadius: 20,
-    borderWidth: 1,
-    borderColor: 'rgba(200,146,42,0.25)',
+    marginHorizontal: 4,
   },
-  professionText: {
-    fontSize: 10,
+  professionBadgeText: {
+    fontSize: 9,
     fontWeight: '800',
-    letterSpacing: 2.5,
-    color: Colors.gold,
+    letterSpacing: 1.5,
+  },
+  heroInfo: {
+    flex: 1,
+    paddingBottom: 12,
   },
   name: {
-    fontSize: 32,
-    fontWeight: '800',
-    color: Colors.brownDark,
+    fontSize: 48,
+    fontWeight: '700',
+    lineHeight: 52,
     letterSpacing: 0.2,
-    lineHeight: 36,
+  },
+  nameLine: {
+    width: 40,
+    height: 3,
+    borderRadius: 2,
+    marginTop: 10,
   },
 
-  // Ajratgich
+  // Divider
   divider: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -154,75 +178,104 @@ const styles = StyleSheet.create({
   dividerLine: {
     flex: 1,
     height: 1,
-    backgroundColor: Colors.creamMid,
   },
   dividerIcon: {
-    color: Colors.gold,
-    fontSize: 11,
-    opacity: 0.6,
+    fontSize: 10,
+    opacity: 0.4,
   },
 
-  // Bo'lim
-  sectionHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
+  // Quote
+  quoteCard: {
     marginHorizontal: 28,
     marginBottom: 16,
-    gap: 12,
+    borderRadius: 16,
+    padding: 24,
+    paddingTop: 12,
+    borderWidth: 1,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.04,
+        shadowRadius: 8,
+      },
+      android: { elevation: 1 },
+      web: { boxShadow: '0 1px 12px rgba(0,0,0,0.04)' },
+    }),
   },
-  sectionAccent: {
-    width: 4,
-    height: 22,
-    backgroundColor: Colors.gold,
-    borderRadius: 2,
+  quoteMark: {
+    fontSize: 48,
+    lineHeight: 48,
+    fontWeight: '700',
+    opacity: 0.3,
   },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: '800',
-    color: Colors.brownMid,
+  quoteLabel: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    marginBottom: 12,
+  },
+  quoteLabelLine: {
+    width: 14,
+    height: 1,
+  },
+  quoteLabelText: {
+    fontSize: 10,
+    fontWeight: '700',
+    letterSpacing: 2,
+  },
+  quoteText: {
+    fontSize: 16,
+    lineHeight: 24,
+    fontStyle: 'italic',
     letterSpacing: 0.2,
   },
 
-  // Matn
-  textCard: {
+  // Story
+  storyCard: {
     marginHorizontal: 28,
-    marginBottom: 28,
-    backgroundColor: Colors.white,
+    marginBottom: 24,
     borderRadius: 16,
-    padding: 28,
-    paddingTop: 12,
-    paddingBottom: 12,
+    padding: 24,
+    borderWidth: 1,
     ...Platform.select({
       ios: {
-        shadowColor: Colors.shadow,
+        shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.06,
-        shadowRadius: 12,
+        shadowOpacity: 0.04,
+        shadowRadius: 8,
       },
-      android: { elevation: 2 },
-      web: { boxShadow: '0 2px 20px rgba(26,8,0,0.06)' },
+      android: { elevation: 1 },
+      web: { boxShadow: '0 1px 12px rgba(0,0,0,0.04)' },
     }),
   },
-  openQuote: {
-    fontSize: 52,
-    color: Colors.gold,
-    opacity: 0.2,
-    lineHeight: 44,
-    fontWeight: '900',
+  storyHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    marginBottom: 14,
   },
-  text: {
+  storyAccent: {
+    width: 4,
+    height: 22,
+    borderRadius: 2,
+  },
+  storyTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+  },
+  storyText: {
     fontSize: 16,
-    lineHeight: 30,
-    color: Colors.textMid,
+    lineHeight: 24,
     letterSpacing: 0.2,
-    paddingHorizontal: 4,
   },
-  closeQuote: {
-    fontSize: 52,
-    color: Colors.gold,
-    opacity: 0.2,
-    lineHeight: 36,
-    fontWeight: '900',
-    textAlign: 'right',
+
+  // Hint
+  hint: {
+    textAlign: 'center',
+    fontSize: 12,
+    marginHorizontal: 28,
+    marginBottom: 16,
+    letterSpacing: 0.3,
   },
 });
