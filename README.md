@@ -161,3 +161,6 @@ Yangi til qo'shish uchun:
 ## 📄 Litsenziya
 
 © 2026 Uktam Turgun. Barcha huquqlar himoyalangan.
+
+- **Kitob muallifi:** Mirzo Ulug'bek
+- **Ilova yaratuvchi:** Oktam Turgun
