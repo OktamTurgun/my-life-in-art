@@ -1,8 +1,12 @@
 import { Platform, StyleSheet, Text, View } from 'react-native';
 import { useColors } from '../hooks/useColors';
+import { useLanguage } from '../hooks/useLanguage';
+
+
 
 export default function Footer() {
   const C = useColors();
+  const { t } = useLanguage();
 
   return (
     <View style={[styles.footer, {
@@ -17,13 +21,13 @@ export default function Footer() {
             <Text style={[styles.logoBadgeText, { color: '#ffffff' }]}>MU</Text>
           </View>
           <Text style={[styles.title, { color: '#ffffff' }]}>
-            San'atdagi hayot yo'lim
+            {t.footer.title}
           </Text>
         </View>
 
         {/* O'ng — Copyright */}
         <Text style={[styles.copy, { color: 'rgba(255,255,255,0.5)' }]}>
-          © 2024 Mirzo Ulug'bek
+          {t.footer.copy}
         </Text>
 
       </View>

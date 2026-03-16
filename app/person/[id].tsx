@@ -1,37 +1,42 @@
 import { useLocalSearchParams } from 'expo-router';
 import { StyleSheet, Text, View } from 'react-native';
 import PersonDetail from '../../components/PersonDetail';
-import Colors from '../../constants/colors';
+import { useColors } from '../../hooks/useColors';
 import { usePerson } from '../../hooks/usePeople';
 
 export default function PersonScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { person, loading } = usePerson(id);
+  const C = useColors();
 
   if (loading) {
     return (
-      <View style={styles.center}>
-        <Text style={styles.text}>Yuklanmoqda...</Text>
+      <View style={[styles.center, { backgroundColor: C.bg }]}>
+        <Text style={[styles.text, { color: C.textMuted }]}>Yuklanmoqda...</Text>
       </View>
     );
   }
 
   if (!person) {
     return (
-      <View style={styles.center}>
-        <Text style={styles.text}>Shaxs topilmadi</Text>
+      <View style={[styles.center, { backgroundColor: C.bg }]}>
+        <Text style={[styles.text, { color: C.textMuted }]}>Shaxs topilmadi</Text>
       </View>
     );
   }
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: C.bg }]}>
       <PersonDetail
         name={person.name}
         profession={person.profession}
         image={person.image}
-        title={person.title}
-        text={person.text}
+        title_uz={person.title_uz}
+        title_en={person.title_en}
+        title_ru={person.title_ru}
+        text_uz={person.text_uz}
+        text_en={person.text_en}
+        text_ru={person.text_ru}
         videoId={person.videoId}
       />
     </View>
@@ -41,16 +46,13 @@ export default function PersonScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.cream,
   },
   center: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: Colors.cream,
   },
   text: {
     fontSize: 16,
-    color: Colors.brownMid,
   },
 });

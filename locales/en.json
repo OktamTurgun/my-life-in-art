@@ -1,0 +1,44 @@
+{
+  "navbar": {
+    "title": "My life in art",
+    "author": "Author"
+  },
+  "sidebar": {
+    "participants": "Participants"
+  },
+  "detail": {
+    "myStory": "My story",
+    "videoTitle": "Video interview",
+    "hint": "← Select another participant from the left list"
+  },
+  "video": {
+    "watchOnYoutube": "YouTube ↗",
+    "tapToWatch": "Tap to watch ↗"
+  },
+  "footer": {
+    "title": "My life in art",
+    "copy": "© 2024 Mirzo Ulugbek"
+  },
+  "professions": {
+    "Yozuvchi": "Writer",
+    "Rassom": "Painter",
+    "Musiqachi": "Musician",
+    "Aktyor": "Actor",
+    "Haykaltarosh": "Sculptor",
+    "Fotograf": "Photographer",
+    "Rejissyor": "Director",
+    "Xoreograf": "Choreographer",
+    "Grafik dizayner": "Graphic designer",
+    "Adiba": "Author",
+    "Kompozitor": "Composer",
+    "Keramist": "Ceramist",
+    "Teatr rejissyori": "Theatre director",
+    "Naqqosh": "Ornamentalist",
+    "Animator": "Animator",
+    "Kuychi": "Singer",
+    "Kaligraf": "Calligrapher",
+    "Bastakor": "Songwriter",
+    "Liboschi": "Fashion designer",
+    "Dizayner": "Designer"
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "navbar": {
+    "title": "San'atdagi hayot yo'lim",
+    "author": "Muallif"
+  },
+  "sidebar": {
+    "participants": "Ishtirokchilar"
+  },
+  "detail": {
+    "myStory": "Mening hikoyam",
+    "videoTitle": "Video suhbat",
+    "hint": "← Chap tomondagi ro'yxatdan boshqa ishtirokchilarni tanlang"
+  },
+  "video": {
+    "watchOnYoutube": "YouTube ↗",
+    "tapToWatch": "Videoni ko'rish uchun bosing ↗"
+  },
+  "footer": {
+    "title": "San'atdagi hayot yo'lim",
+    "copy": "© 2024 Mirzo Ulug'bek"
+  },
+  "professions": {
+    "Yozuvchi": "Yozuvchi",
+    "Rassom": "Rassom",
+    "Musiqachi": "Musiqachi",
+    "Aktyor": "Aktyor",
+    "Haykaltarosh": "Haykaltarosh",
+    "Fotograf": "Fotograf",
+    "Rejissyor": "Rejissyor",
+    "Xoreograf": "Xoreograf",
+    "Grafik dizayner": "Grafik dizayner",
+    "Adiba": "Adiba",
+    "Kompozitor": "Kompozitor",
+    "Keramist": "Keramist",
+    "Teatr rejissyori": "Teatr rejissyori",
+    "Naqqosh": "Naqqosh",
+    "Animator": "Animator",
+    "Kuychi": "Kuychi",
+    "Kaligraf": "Kaligraf",
+    "Bastakor": "Bastakor",
+    "Liboschi": "Liboschi",
+    "Dizayner": "Dizayner"
+  }
+}

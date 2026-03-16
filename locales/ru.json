@@ -1,0 +1,44 @@
+{
+  "navbar": {
+    "title": "Моя жизнь в искусстве",
+    "author": "Автор"
+  },
+  "sidebar": {
+    "participants": "Участники"
+  },
+  "detail": {
+    "myStory": "Моя история",
+    "videoTitle": "Видео интервью",
+    "hint": "← Выберите другого участника из списка слева"
+  },
+  "video": {
+    "watchOnYoutube": "YouTube ↗",
+    "tapToWatch": "Нажмите для просмотра ↗"
+  },
+  "footer": {
+    "title": "Моя жизнь в искусстве",
+    "copy": "© 2024 Мирзо Улугбек"
+  },
+  "professions": {
+    "Yozuvchi": "Писатель",
+    "Rassom": "Художник",
+    "Musiqachi": "Музыкант",
+    "Aktyor": "Актёр",
+    "Haykaltarosh": "Скульптор",
+    "Fotograf": "Фотограф",
+    "Rejissyor": "Режиссёр",
+    "Xoreograf": "Хореограф",
+    "Grafik dizayner": "Графический дизайнер",
+    "Adiba": "Писательница",
+    "Kompozitor": "Композитор",
+    "Keramist": "Керамист",
+    "Teatr rejissyori": "Театральный режиссёр",
+    "Naqqosh": "Орнаменталист",
+    "Animator": "Аниматор",
+    "Kuychi": "Певец",
+    "Kaligraf": "Каллиграф",
+    "Bastakor": "Автор песен",
+    "Liboschi": "Модельер",
+    "Dizayner": "Дизайнер"
+  }
+}

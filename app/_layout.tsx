@@ -7,11 +7,12 @@ import Footer from '../components/Footer';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import { DarkColors, LightColors } from '../constants/colors';
+import { getTranslations, Language, LanguageContext } from '../hooks/useLanguage';
 import { usePeople } from '../hooks/usePeople';
 
 const BREAKPOINT = 768;
 
-// ===== Dark Mode Context =====
+// ===== Theme Context =====
 export const ThemeContext = createContext({
   isDark: false,
   toggleTheme: () => {},
@@ -23,6 +24,7 @@ export function useTheme() {
 
 export default function RootLayout() {
   const [isDark, setIsDark] = useState(false);
+  const [lang, setLang] = useState<Language>('uz');
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { people } = usePeople();
   const { width } = useWindowDimensions();
@@ -30,72 +32,73 @@ export default function RootLayout() {
   const isWeb = Platform.OS === 'web';
   const isWide = isWeb && width >= BREAKPOINT;
   const C = isDark ? DarkColors : LightColors;
+  const t = getTranslations(lang);
 
   const selectedId = pathname.startsWith('/person/')
     ? pathname.replace('/person/', '')
     : null;
 
-  const toggleTheme = () => setIsDark(prev => !prev);
-
   return (
-    <ThemeContext.Provider value={{ isDark, toggleTheme }}>
-      <SafeAreaProvider>
-        <SafeAreaView
-          style={[styles.root, { backgroundColor: C.navbarBg }]}
-          edges={['top', 'bottom']}
-        >
-          <StatusBar
-            style={isDark ? 'light' : 'dark'}
-            backgroundColor={C.navbarBg}
-          />
+    <ThemeContext.Provider value={{ isDark, toggleTheme: () => setIsDark(p => !p) }}>
+      <LanguageContext.Provider value={{ lang, setLang, t }}>
+        <SafeAreaProvider>
+          <SafeAreaView
+            style={[styles.root, { backgroundColor: C.navbarBg }]}
+            edges={['top', 'bottom']}
+          >
+            <StatusBar
+              style={isDark ? 'light' : 'dark'}
+              backgroundColor={C.navbarBg}
+            />
 
-          {/* Navbar */}
-          <Navbar
-            onMenuPress={() => setSidebarOpen(true)}
-            showHamburger={!isWide}
-            onThemeToggle={toggleTheme}
-            isDark={isDark}
-          />
+            {/* Navbar */}
+            <Navbar
+              onMenuPress={() => setSidebarOpen(true)}
+              showHamburger={!isWide}
+              onThemeToggle={() => setIsDark(p => !p)}
+              isDark={isDark}
+            />
 
-          {/* Body */}
-          <View style={[styles.body, { backgroundColor: C.bg }]}>
-            {isWide && (
-              <View style={[styles.desktopSidebar, { borderRightColor: C.sidebarBorder }]}>
-                <Sidebar
-                  people={people}
-                  selectedId={selectedId}
-                  isOpen={true}
-                  onClose={() => {}}
-                  isDesktop={true}
+            {/* Body */}
+            <View style={[styles.body, { backgroundColor: C.bg }]}>
+              {isWide && (
+                <View style={[styles.desktopSidebar, { borderRightColor: C.sidebarBorder }]}>
+                  <Sidebar
+                    people={people}
+                    selectedId={selectedId}
+                    isOpen={true}
+                    onClose={() => {}}
+                    isDesktop={true}
+                  />
+                </View>
+              )}
+              <View style={styles.content}>
+                <Stack
+                  screenOptions={{
+                    headerShown: false,
+                    contentStyle: { backgroundColor: C.bg },
+                    animation: 'fade',
+                  }}
                 />
               </View>
-            )}
-            <View style={styles.content}>
-              <Stack
-                screenOptions={{
-                  headerShown: false,
-                  contentStyle: { backgroundColor: C.bg },
-                  animation: 'fade',
-                }}
-              />
             </View>
-          </View>
 
-          {/* Footer */}
-          <Footer />
+            {/* Footer */}
+            <Footer />
 
-          {/* Mobil sidebar */}
-          {!isWide && (
-            <Sidebar
-              people={people}
-              selectedId={selectedId}
-              isOpen={sidebarOpen}
-              onClose={() => setSidebarOpen(false)}
-              isDesktop={false}
-            />
-          )}
-        </SafeAreaView>
-      </SafeAreaProvider>
+            {/* Mobil sidebar */}
+            {!isWide && (
+              <Sidebar
+                people={people}
+                selectedId={selectedId}
+                isOpen={sidebarOpen}
+                onClose={() => setSidebarOpen(false)}
+                isDesktop={false}
+              />
+            )}
+          </SafeAreaView>
+        </SafeAreaProvider>
+      </LanguageContext.Provider>
     </ThemeContext.Provider>
   );
 }
