@@ -12,6 +12,7 @@ import {
   View,
 } from 'react-native';
 import { useColors } from '../hooks/useColors';
+import { Language, useLanguage } from '../hooks/useLanguage';
 
 type Person = {
   id: string;
@@ -35,6 +36,12 @@ export default function Sidebar({
 }: Props) {
   const router = useRouter();
   const C = useColors();
+  const { t, lang, setLang } = useLanguage();
+
+const getProfession = (profession: string) => {
+  const profs = t.professions as Record<string, string>;
+  return profs[profession] || profession;
+};
   const translateX = useRef(
     new Animated.Value(isDesktop ? 0 : -SIDEBAR_WIDTH)
   ).current;
@@ -63,8 +70,31 @@ export default function Sidebar({
       {/* Header */}
       <View style={[styles.header, { borderBottomColor: C.sidebarBorder }]}>
         <Text style={[styles.headerText, { color: C.textMuted }]}>
-          ISHTIROKCHILAR
+          {t.sidebar.participants.toUpperCase()}
         </Text>
+
+        {/* Til tanlash — faqat mobilda */}
+        {!isDesktop && (
+          <View style={[styles.langGroup, { backgroundColor: C.bgMuted }]}>
+            {(['uz', 'en', 'ru'] as Language[]).map((l) => (
+              <TouchableOpacity
+                key={l}
+                onPress={() => setLang(l)}
+                style={[
+                  styles.langBtn,
+                  lang === l && { backgroundColor: '#f29900' }
+                ]}
+              >
+                <Text style={[
+                  styles.langText,
+                  { color: lang === l ? '#fff' : C.textMuted }
+                ]}>
+                  {l.toUpperCase()}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        )}
       </View>
 
       {/* Ro'yxat */}
@@ -100,7 +130,7 @@ export default function Sidebar({
                   {person.name}
                 </Text>
                 <Text style={[styles.profession, { color: C.textMuted }]}>
-                  {person.profession}
+                  {getProfession(person.profession)}
                 </Text>
               </View>
 
@@ -207,5 +237,24 @@ const styles = StyleSheet.create({
   arrow: {
     fontSize: 18,
     fontWeight: '700',
+  },
+  langGroup: {
+    flexDirection: 'row',
+    borderRadius: 8,
+    overflow: 'hidden',
+    padding: 2,
+    gap: 2,
+    marginTop: 10,
+  },
+  langBtn: {
+    flex: 1,
+    paddingVertical: 6,
+    borderRadius: 6,
+    alignItems: 'center',
+  },
+  langText: {
+    fontSize: 11,
+    fontWeight: '700',
+    letterSpacing: 0.5,
   },
 });
