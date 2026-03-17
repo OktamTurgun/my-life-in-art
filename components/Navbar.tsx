@@ -198,7 +198,7 @@ export default function Navbar({ onMenuPress, showHamburger = true, onThemeToggl
         </View>
         {!isSmall && (
           <View style={styles.logoTextBox}>
-            <Text style={[styles.logoName, { color: C.text }]}>Mirzo Ulug'bek</Text>
+            <Text style={[styles.logoName, { color: C.text }]}>Mirzo Ulug&apos;bek</Text>
             <Text style={[styles.logoLabel, { color: '#f29900' }]}>+ {t.navbar.author}</Text>
           </View>
         )}

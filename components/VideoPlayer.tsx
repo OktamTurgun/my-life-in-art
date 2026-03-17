@@ -80,7 +80,7 @@ function MobileEmbed({ videoId, youtubeUrl }: { videoId: string; youtubeUrl: str
         <View style={styles.playCircle}>
           <Text style={styles.playArrow}>▶</Text>
         </View>
-        <Text style={styles.tapHint}>Videoni ko'rish uchun bosing ↗</Text>
+        <Text style={styles.tapHint}>Videoni ko&apos;rish uchun bosing ↗</Text>
       </View>
     </TouchableOpacity>
   );

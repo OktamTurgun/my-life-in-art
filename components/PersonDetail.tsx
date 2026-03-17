@@ -69,7 +69,7 @@ export default function PersonDetail(props: Props) {
 
         {/* Quote blok */}
         <View style={[styles.quoteCard, { backgroundColor: C.bgCard, borderColor: C.border }]}>
-          <Text style={[styles.quoteMark, { color: C.bgMuted }]}>"</Text>
+          <Text style={[styles.quoteMark, { color: C.bgMuted }]}>&quot;</Text>
           <View style={styles.quoteLabel}>
             <View style={[styles.quoteLabelLine, { backgroundColor: C.textMuted }]} />
             <Text style={[styles.quoteLabelText, { color: C.textMuted }]}>
