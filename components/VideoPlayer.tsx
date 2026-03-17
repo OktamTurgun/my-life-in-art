@@ -88,7 +88,6 @@ function MobileEmbed({ videoId, youtubeUrl }: { videoId: string; youtubeUrl: str
 
 const styles = StyleSheet.create({
   wrapper: {
-    paddingHorizontal: 28,
     marginBottom: 32,
   },
   container: {

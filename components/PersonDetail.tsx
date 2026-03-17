@@ -107,9 +107,10 @@ const styles = StyleSheet.create({
   scrollContent: { paddingBottom: 40 },
   inner: {
     width: '100%',
+    maxWidth: 1000,
     alignSelf: 'center',
     paddingTop: 8,
-    paddingHorizontal: Platform.OS === 'web' ? 48 : 16,
+    paddingHorizontal: Platform.OS === 'web' ? 40 : 20,
   },
   hero: {
     flexDirection: 'row',
@@ -122,8 +123,8 @@ const styles = StyleSheet.create({
     flexShrink: 0,
   },
   avatar: {
-    width: 96,
-    height: 96,
+    width: 128,
+    height: 128,
     borderRadius: 16,
     backgroundColor: '#ececf0',
     ...Platform.select({
