@@ -1,6 +1,7 @@
 import { useRouter } from 'expo-router';
 import { useEffect } from 'react';
 import { ActivityIndicator, View } from 'react-native';
+import { checkAuth } from '../hooks/useAuth';
 import { usePeople } from '../hooks/usePeople';
 
 export default function HomeScreen() {
@@ -8,9 +9,17 @@ export default function HomeScreen() {
   const router = useRouter();
 
   useEffect(() => {
-    if (!loading && people.length > 0) {
-      router.replace(`/person/${people[0].id}`);
-    }
+    const check = async () => {
+      const authed = await checkAuth();
+      if (!authed) {
+        router.replace('/login');
+        return;
+      }
+      if (!loading && people.length > 0) {
+        router.replace(`/person/${people[0].id}`);
+      }
+    };
+    check();
   }, [loading, people]);
 
   return (
