@@ -200,8 +200,13 @@ const styles = StyleSheet.create({
 
   pinContainer: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 15 },
   pinBox: {
-    width: width * 0.15, height: 60, borderRadius: 15,
-    borderWidth: 1, borderColor: '#E5E9EF', justifyContent: 'center', alignItems: 'center'
+    width: Platform.OS === 'web' ? 64 : width * 0.15,
+    height: 60,
+    borderRadius: 15,
+    borderWidth: 1,
+    borderColor: '#E5E9EF',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   pinBoxFocused: { borderColor: '#F27405', borderWidth: 2 },
   pinBoxFilled: { backgroundColor: '#F8F9FB' },
@@ -214,10 +219,22 @@ const styles = StyleSheet.create({
   dotInactive: { backgroundColor: '#E5E9EF' },
 
   passwordWrapper: {
-    flexDirection: 'row', alignItems: 'center', borderWidth: 1,
-    borderColor: '#E5E9EF', borderRadius: 15, paddingHorizontal: 15, height: 55
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#E5E9EF',
+    borderRadius: 15,
+    paddingHorizontal: 15,
+    height: 55,
   },
-  passwordInput: { flex: 1, color: '#101B2B', fontSize: 15 },
+  passwordInput: {
+    flex: 1,
+    color: '#101B2B',
+    fontSize: 15,
+    ...Platform.select({
+      web: { outlineStyle: 'none' } as any,
+    }),
+  },
 
   errorContainer: {
     marginTop: 20, backgroundColor: '#FFF5F5', borderRadius: 12,
