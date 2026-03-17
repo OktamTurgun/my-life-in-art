@@ -30,6 +30,7 @@ export function useAuth() {
 const storage = {
   getItem: async (key: string): Promise<string | null> => {
     if (Platform.OS === 'web') {
+      if (typeof window === 'undefined') return null; // SSR himoya
       return localStorage.getItem(key);
     }
     const AsyncStorage = require('@react-native-async-storage/async-storage').default;
@@ -37,6 +38,7 @@ const storage = {
   },
   setItem: async (key: string, value: string): Promise<void> => {
     if (Platform.OS === 'web') {
+      if (typeof window === 'undefined') return; // SSR himoya
       localStorage.setItem(key, value);
       return;
     }
@@ -45,6 +47,7 @@ const storage = {
   },
   removeItem: async (key: string): Promise<void> => {
     if (Platform.OS === 'web') {
+      if (typeof window === 'undefined') return; // SSR himoya
       localStorage.removeItem(key);
       return;
     }
@@ -55,6 +58,7 @@ const storage = {
 
 export async function checkAuth(): Promise<boolean> {
   try {
+    if (typeof window === 'undefined') return false; // SSR himoya
     const token = await storage.getItem(AUTH_KEY);
     if (!token) return false;
     const { expiry } = JSON.parse(token);
