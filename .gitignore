@@ -59,3 +59,5 @@ app-example
 /ios
 /android
 .vercel
+
+cleanup-merged-branches.ps1
