@@ -56,7 +56,7 @@ const getProfession = (profession: string) => {
   }, [isOpen, isDesktop]);
 
   const handleSelect = (id: string) => {
-    router.push(`/person/${id}`);
+    router.replace(`/person/${id}`);
     if (!isDesktop) onClose();
   };
 
