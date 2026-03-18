@@ -2,8 +2,8 @@ import { createContext, useContext } from 'react';
 import { Platform } from 'react-native';
 
 // ===== PAROL VA PIN =====
-const CORRECT_PIN = '1303';
-const CORRECT_PASSWORD = 'kitoblar1303';
+const CORRECT_PIN = process.env.EXPO_PUBLIC_APP_PIN || '';
+const CORRECT_PASSWORD = process.env.EXPO_PUBLIC_APP_PASSWORD || '';
 const AUTH_KEY = 'auth_token';
 const AUTH_EXPIRY_HOURS = 24;
 // ========================
