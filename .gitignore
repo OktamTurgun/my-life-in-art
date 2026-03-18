@@ -1,7 +1,7 @@
-# Learn more https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
-
 # dependencies
 node_modules/
+.pnp
+.pnp.js
 
 # Expo
 .expo/
@@ -17,6 +17,8 @@ expo-env.d.ts
 *.p12
 *.key
 *.mobileprovision
+/ios
+/android
 
 # Metro
 .metro-health-check*
@@ -25,39 +27,46 @@ expo-env.d.ts
 npm-debug.*
 yarn-debug.*
 yarn-error.*
+*.log
 
-# macOS
+# macOS & Windows
 .DS_Store
 *.pem
-
-# Windows
 Thumbs.db
 ehthumbs.db
 Desktop.ini
 
-# local env files
+# Environment variables (Juda muhim!)
 .env
 .env.local
+.env.development.local
+.env.test.local
+.env.production.local
 .env*.local
+# Agar .env.example bo'lsa, uni GitHubga ruxsat beramiz
+!.env.example
 
-# Vercel
+# Vercel & EAS
 .vercel/
-
-# EAS
 .eas/
 
-# typescript
+# Editor (Hamma maxfiy sozlamalarni yopamiz)
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Testing
+coverage/
+.eslintcache
+.stylelintcache
+
+# TypeScript
 *.tsbuildinfo
 
-# Editor
-.vscode/settings.json
-.idea/
-
-app-example
-
-# generated native folders
-/ios
-/android
-.vercel
-
+# Scripts and others
 cleanup-merged-branches.ps1
+app-example/
