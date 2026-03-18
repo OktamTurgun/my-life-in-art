@@ -1,4 +1,5 @@
 import { Stack, usePathname, useRouter } from 'expo-router';
+import Head from 'expo-router/head'; // QO'SHILDI
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, Platform, StyleSheet, useWindowDimensions, View } from 'react-native';
@@ -24,6 +25,7 @@ export default function RootLayout() {
   const { width } = useWindowDimensions();
   const pathname = usePathname();
   const router = useRouter();
+  
   const isWeb = Platform.OS === 'web';
   const isWide = isWeb && width >= BREAKPOINT;
   const C = isDark ? DarkColors : LightColors;
@@ -82,6 +84,11 @@ export default function RootLayout() {
     <AuthContext.Provider value={{ isAuthenticated, isLoading, login, logout }}>
       <ThemeContext.Provider value={{ isDark, toggleTheme: () => setIsDark(p => !p) }}>
         <LanguageContext.Provider value={{ lang, setLang, t }}>
+          {/* WEB UCHUN VIEWPORT SOZLAMASI */}
+          <Head>
+            <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+          </Head>
+          
           <SafeAreaProvider>
             <SafeAreaView
               style={[styles.root, { backgroundColor: isLoginPage ? C.bg : C.navbarBg }]}

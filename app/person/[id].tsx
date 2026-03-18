@@ -27,18 +27,7 @@ export default function PersonScreen() {
 
   return (
     <View style={[styles.container, { backgroundColor: C.bg }]}>
-      <PersonDetail
-        name={person.name}
-        profession={person.profession}
-        image={person.image}
-        title_uz={person.title_uz}
-        title_en={person.title_en}
-        title_ru={person.title_ru}
-        text_uz={person.text_uz}
-        text_en={person.text_en}
-        text_ru={person.text_ru}
-        videoId={person.videoId}
-      />
+      <PersonDetail {...person} />
     </View>
   );
 }
@@ -46,6 +35,7 @@ export default function PersonScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    width: '100%', // WEBDA TO'LIQ KENGUYISH UCHUN
   },
   center: {
     flex: 1,

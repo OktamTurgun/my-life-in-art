@@ -1,6 +1,6 @@
 import {
   Image, Platform, ScrollView,
-  StyleSheet, Text, View,
+  StyleSheet, Text, View, useWindowDimensions
 } from 'react-native';
 import { useColors } from '../hooks/useColors';
 import { Language, useLanguage } from '../hooks/useLanguage';
@@ -27,11 +27,14 @@ function getText(person: Props, lang: Language, field: 'title' | 'text') {
 export default function PersonDetail(props: Props) {
   const C = useColors();
   const { lang, t } = useLanguage();
+  const { width } = useWindowDimensions(); // Kenglikni o'lchash
+
+  const isMobileWeb = Platform.OS === 'web' && width < 768;
 
   const getProfession = (profession: string) => {
-  const profs = t.professions as Record<string, string>;
-  return profs[profession] || profession;
-};
+    const profs = t.professions as Record<string, string>;
+    return profs[profession] || profession;
+  };
 
   const title = getText(props, lang, 'title');
   const text = getText(props, lang, 'text');
@@ -42,10 +45,10 @@ export default function PersonDetail(props: Props) {
       contentContainerStyle={styles.scrollContent}
       showsVerticalScrollIndicator={false}
     >
-      <View style={styles.inner}>
+      <View style={[styles.inner, { paddingHorizontal: isMobileWeb ? 16 : (Platform.OS === 'web' ? 40 : 20) }]}>
 
         {/* Hero */}
-        <View style={styles.hero}>
+        <View style={[styles.hero, isMobileWeb && { flexDirection: 'column', alignItems: 'flex-start' }]}>
           <View style={styles.avatarWrapper}>
             <Image source={{ uri: props.image }} style={styles.avatar} />
             <View style={[styles.professionBadge, { backgroundColor: '#f29900' }]}>
@@ -54,8 +57,16 @@ export default function PersonDetail(props: Props) {
               </Text>
             </View>
           </View>
-          <View style={styles.heroInfo}>
-            <Text style={[styles.name, { color: C.text }]}>{props.name}</Text>
+          <View style={[styles.heroInfo, isMobileWeb && { paddingBottom: 0 }]}>
+            <Text 
+              style={[
+                styles.name, 
+                { color: C.text },
+                isMobileWeb && { fontSize: 32, lineHeight: 38 }
+              ]}
+            >
+              {props.name}
+            </Text>
             <View style={[styles.nameLine, { backgroundColor: '#f29900' }]} />
           </View>
         </View>
@@ -110,7 +121,6 @@ const styles = StyleSheet.create({
     maxWidth: 1000,
     alignSelf: 'center',
     paddingTop: 8,
-    paddingHorizontal: Platform.OS === 'web' ? 40 : 20,
   },
   hero: {
     flexDirection: 'row',
