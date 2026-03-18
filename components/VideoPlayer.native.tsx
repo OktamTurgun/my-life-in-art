@@ -1,11 +1,11 @@
-import { useEffect, useRef } from 'react';
 import {
-  Linking, Platform,
+  Linking,
   StyleSheet,
   Text,
   TouchableOpacity,
   View
 } from 'react-native';
+import YoutubePlayer from 'react-native-youtube-iframe';
 import { useColors } from '../hooks/useColors';
 
 type Props = {
@@ -36,32 +36,13 @@ export default function VideoPlayer({ videoId, title }: Props) {
             <Text style={[styles.openLink, { color: '#f29900' }]}>YouTube ↗</Text>
           </TouchableOpacity>
         </View>
-        <View style={styles.videoBox}>
-          <WebEmbed key={videoId} videoId={videoId} />
-        </View>
+        <YoutubePlayer
+          height={220}
+          videoId={videoId}
+          play={false}
+        />
       </View>
     </View>
-  );
-}
-
-function WebEmbed({ videoId }: { videoId: string }) {
-  const iframeRef = useRef<HTMLIFrameElement>(null);
-
-  useEffect(() => {
-    return () => {
-      if (iframeRef.current) {
-        iframeRef.current.src = '';
-      }
-    };
-  }, []);
-
-  return (
-    <iframe
-      ref={iframeRef}
-      src={`https://www.youtube.com/embed/${videoId}?rel=0&modestbranding=1`}
-      style={{ width: '100%', height: '100%', border: 'none' }}
-      allowFullScreen
-    />
   );
 }
 
@@ -71,9 +52,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     overflow: 'hidden',
     borderWidth: 1,
-    ...Platform.select({
-      web: { boxShadow: '0 4px 24px rgba(0,0,0,0.08)' },
-    }),
+    elevation: 4,
   },
   header: {
     flexDirection: 'row',
@@ -99,5 +78,4 @@ const styles = StyleSheet.create({
   playText: { color: '#fff', fontSize: 10, fontWeight: '900' },
   headerText: { fontWeight: '600', fontSize: 14, flex: 1 },
   openLink: { fontSize: 12, fontWeight: '600', marginLeft: 8 },
-  videoBox: { height: 420, backgroundColor: '#000' },
 });
